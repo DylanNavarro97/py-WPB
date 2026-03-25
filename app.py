@@ -42,6 +42,10 @@ def load_webhook():
     
     data = request.json
     print(data)
+    if request:
+        return data
+    else: 
+        return "Hubo un error recibiendo el body de la solicitud POST", 400
 
     
         
