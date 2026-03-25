@@ -31,14 +31,14 @@ def load_webhook():
 
     body = request.data
 
-    # expected_signature = "sha256=" + hmac.new(
-    #     WP_KEY.encode(),
-    #     body,
-    #     hashlib.sha256
-    # ).hexdigest()
+    expected_signature = "sha256=" + hmac.new(
+        WP_KEY.encode(),
+        body,
+        hashlib.sha256
+    ).hexdigest()
 
-    # if signature != expected_signature:
-    #     return "firma inválida", 403
+    if signature != expected_signature:
+        return "firma inválida", 403
     
     data = request.json
     print(data)
@@ -46,6 +46,29 @@ def load_webhook():
         return data
     else: 
         return "Hubo un error recibiendo el body de la solicitud POST", 400
+    
+def send_message(to, message):
+    url = f"https://graph.facebook.com/v25.0/{os.getenv('ID_TEL')}/messages"
+
+    headers = {
+        "Authorization" : f"Bearer {os.getenv("WP_KEY")}",
+        "Content-Type0" : "application/json"
+    }
+
+    body = {
+        "messaging_product" : "whatsapp",
+        "to": to,
+        "type" : "text",
+        "text" : {
+            "body" : message
+        }
+    }
+
+    response = request.post(url, json=body, headers=headers)
+    if (response.status.code != 200):
+        return "Hubo un error enviando un mensaje", 403
+    else :
+        return response, 200
 
     
         
