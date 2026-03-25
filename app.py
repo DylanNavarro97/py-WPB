@@ -40,7 +40,7 @@ def load_webhook():
     # if signature != expected_signature:
     #     return "firma inválida", 403
     
-    data = request.json()
+    data = request.json
     print(data)
 
     
